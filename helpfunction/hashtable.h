@@ -15,4 +15,5 @@ typedef struct node{
 node;
 
 void test(void);
+int tabulate(void);
 #endif
