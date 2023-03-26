@@ -6,7 +6,7 @@
 typedef struct node{
     float amount_paid;
     char *date;
-    node *next_node;
+    struct node *next_node;
 }
 node;
 
