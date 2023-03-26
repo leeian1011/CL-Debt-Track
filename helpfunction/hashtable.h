@@ -1,3 +1,6 @@
+#ifndef HASHTABLE_H
+#define HASHTABLE_H
+
 #include <stdio.h>
 #include <stdbool.h>
 
@@ -10,3 +13,6 @@ typedef struct node{
     struct node *next_node;
 }
 node;
+
+void test();
+#endif
