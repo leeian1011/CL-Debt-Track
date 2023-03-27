@@ -1,4 +1,5 @@
-helpfunction/HutangM.csv
-helpfunction/compile.bat
+.csv
+.bat
 .exe
 .o
+.sh

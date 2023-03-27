@@ -4,9 +4,6 @@
 #include "hashtable.h"
 //function headers
 
-//initialize a hash table with arrays of 50
-
-
 int main(){
-    print("test");
+    open_file();
 }

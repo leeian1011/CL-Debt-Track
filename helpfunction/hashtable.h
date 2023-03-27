@@ -2,6 +2,7 @@
 #define HASHTABLE_H
 
 #define MAX 10
+#define CSVFILE "file/test.csv"
 
 typedef struct node{
     float amount_paid;
@@ -10,5 +11,5 @@ typedef struct node{
 }
 node;
 
-void print(char *x);
+void open_file();
 #endif
