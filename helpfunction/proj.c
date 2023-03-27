@@ -5,5 +5,6 @@
 //function headers
 
 int main(){
-    open_file();
+    FILE *csv = fopen(CSVFILE, "r");
+    file_read(csv);
 }

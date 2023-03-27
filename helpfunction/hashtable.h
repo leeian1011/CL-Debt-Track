@@ -11,5 +11,7 @@ typedef struct node{
 }
 node;
 
-void open_file();
+void file_read(FILE *csv);
+int file_columncount(FILE *csv);
+int file_rowcount(FILE *csv);
 #endif
