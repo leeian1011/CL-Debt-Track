@@ -2,86 +2,43 @@
 #include <stdlib.h>
 #include <string.h>
 
+#include "filematch.h"
 #include "hashtable.h"
 
+const char *MONTHS[] = {"Jan", "Feb", "Mar",
+                      "Apr", "May", "Jun", 
+                      "Jul", "Aug", "Sep", 
+                      "Oct", "Nov", "Dec"};
 
-void file_read(FILE* csv){
-    char c;
-    int count = 0;
-    int rows = file_rowcount(csv);
-    int columns = file_columncount(csv);
+node *TABLE[MAX];
 
-    while ((c = fgetc(csv)) != EOF){
-        count++;
-        if(c == '\n'){
+void table_initialize(){
+    for (int i = 0; i < MAX; i++){
+        TABLE[i] = malloc(sizeof(node));
+    }
+}
+
+void table_validate(char *date, char *month){
+    for (int i = 0; i < MAX; i++){
+        if(strcmp(month, MONTHS[i]) == 0){
+            table_linklist(date, month, i);
+            printf("LINK LIST NUMBER :%d", i);
             break;
         }
     }
-
-    char *buffer = malloc(count);
-    if (buffer == NULL){
-        return;
-    }
-    char **date = malloc(sizeof(char*) * rows);
-    if (date == NULL){
-        return;
-    }
-
-    for(int i = 0; i < rows; i++){
-        date[i] = malloc(sizeof(char*) * columns);
-        if (date[i] == NULL){
-            return;
-        }
-    }
-
-    int whileloopcount = 0;
-    while(fgets(buffer, count, csv) != NULL){
-        char *test = strtok(buffer, ",");
-        //strtok returns a POINTER to a char * (i.e the address of buffer)
-        //whenever buffer gets updated to the next line by fgets, strtok's POINTER return value points to the most up to date buffer token
-        //i.e
-        //buffer = "hi, hello"
-        // strtoken("buffer", ",") returns a ->address of hi
-        // if buffer gets set to = "hello, hi"
-        // strtoken("buffer", ",") returns a ->addres of hello.
-        
-        date[whileloopcount] = strdup(test);
-        whileloopcount++;
-    }
-
-    printf("\n%s\n", date[0]);
-    for (int i = 0; i < 4; i++){
-        free(date[i]);
-    }
-    free(buffer);
 }
 
-
-
-int file_rowcount(FILE *csv){
-    int count = 0;
-    char c;
-    while ((c = fgetc(csv)) != EOF){
-        if (c == '\n'){
-            count++;
-        }
+void table_linklist(char *date, char *month, int month_index){
+    node *newnode = malloc(sizeof(node));
+    if (newnode == NULL){
+        return;
     }
-    rewind(csv);
-    return count;
-}
+    // -> == (*ptr).x where you have to state that the structure is actually a pointer!
 
+    newnode->amount_paid = 100.50;
+    strcpy(newnode->date, month);
+    newnode->next_node = TABLE[month_index]->next_node;
+    TABLE[month_index]->next_node = newnode;
 
-int file_columncount(FILE *csv){
-    int count = 0;
-    char c;
-    while ((c = fgetc(csv)) != EOF){
-        if (c == ','){
-            count++;
-        }
-        else if( c == '\n'){
-            rewind(csv);
-            return count;
-        }
-    }
-    return count;
+    printf("%s and %s\n", date, TABLE[month_index]->next_node->date);
 }

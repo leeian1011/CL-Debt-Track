@@ -1,17 +1,17 @@
 #ifndef HASHTABLE_H
 #define HASHTABLE_H
 
-#define MAX 10
-#define CSVFILE "file/test.csv"
+#define MAX 12
+
 
 typedef struct node{
     float amount_paid;
-    char *date;
+    char date[sizeof(char*)];
     struct node *next_node;
 }
 node;
 
-void file_read(FILE *csv);
-int file_columncount(FILE *csv);
-int file_rowcount(FILE *csv);
+void table_initialize();
+void table_validate(char *date, char *month);
+void table_linklist(char *date, char*month, int month_index);
 #endif
