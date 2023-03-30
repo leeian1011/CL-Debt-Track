@@ -35,11 +35,9 @@ void file_read(FILE* csv){
         date[i] = malloc(sizeof(char*) * columns);
     }
 
-    file_dateparse(buffer, csv, date, file_linesize);
-    regex_match(date);
+    
+    regextable_input(file_dateparse(buffer, csv, date, file_linesize));
 
-    free(date);    
-    free(buffer);
 }
 
 
@@ -64,13 +62,11 @@ char **file_dateparse(char *buffer, FILE *csv, char **date, int file_linesize){
 
 
 
-
-
-int regex_match(char **date){
+int regextable_input(char **date){
     regex_t regex;
     regmatch_t regex_match[3];
     // regmatch is used to extract out SUBEXPRESSIONS grouped i.e (...) in pattern
-
+    printf("DATE ARRAY: %d\n", date_array);
     char *regex_pattern = "([[:digit:]]+)-(Jan|Feb|Mar|Apr|May|Jun|Jul|Aug|Oct|Sep|Nov|Dec)";
     // surround [[:digit:]] in SUBEXPRESSIONS in order to be able to extract date and Mth
     // regex_match is an object which gives you access to .rm_so and .rm_eo
@@ -105,41 +101,38 @@ int regex_match(char **date){
         char *match_date = malloc(match_datelength);
         strncpy(match_date, date[i] + match_datestart, match_datelength);
         match_date[match_datelength] = '\0';
-
-        printf("date: %s\nmonth: %s\n", match_date, match_month);
         
         table_validate(match_date, match_month);
     }
     return regex_checker;
 }
+
+ char *regex_validate(char *test){
+    regex_t regex;
+    regmatch_t match[3];
+
+    char *regex_pattern = "([[:digit:]])*(Jan|Feb|Mar|Apr|May|Jun|Jul|Aug|Oct|Sep|Nov|Dec)";
+    int regex_engine = regcomp(&regex, regex_pattern, REG_EXTENDED);
+
+    regex_engine = regexec(&regex, test, 3, match, REG_EXTENDED);
+    if (regex_engine == 0){
+        printf("regex_engine: match found\n");
+    }else{
+        printf("regex_engine: no match");
+        return "fail";
+    }
     
 
+    int matchstart = match[2].rm_so;
+    int matchend = match[2].rm_eo;
+    size_t match_length = matchend - matchstart;
+    char *matched = malloc(match_length);
+    strncpy(matched, test + matchstart, match_length);
+    matched[match_length] = '\0';
+    printf("matched string: %s\n", matched);
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+    return matched;
+ }   
 
 
 int file_rowcount(FILE *csv){
@@ -153,6 +146,7 @@ int file_rowcount(FILE *csv){
     rewind(csv);
     return count;
 }
+
 
 
 int file_columncount(FILE *csv){
