@@ -5,11 +5,12 @@
 #include "hashtable.h"
 #include "filematch.h"
 //function headers
+int addfunct();
 
 int main(){
     FILE *csv = fopen(CSVFILE, "r");
-    char operations[][10] = {"Add", "Remove", "Remainder", "Find", "Exit"};
-    char query[10];
+    char *operations[] = {"Add", "Remove", "Remainder", "Find", "Exit"};
+    char *query = malloc(10);
 
     table_initialize();
     file_read(csv);
@@ -20,7 +21,7 @@ int main(){
         query[strlen(query) - 1]  = '\0';
 
         if (strcasecmp(query, operations[0]) == 0 || query[0] == '1'){
-            addfunct();
+            //addfunct();
             return 0;
         }
         else if (strcasecmp(query, operations[1]) == 0 || query[0] == '2'){
@@ -45,12 +46,13 @@ int main(){
 }
 
 int addfunct(){
-    char date[10];
-    float amount;
+    char *date = malloc(sizeof(char*));
 
     do{
         printf("Input Date:");
-        fgets(date, 10, stdin);
+        fgets(date, sizeof(char*), stdin);
         date[strlen(date) - 1] = '\0';  
     }while(date[0] == '\0' || regex_checkinput(date) != 0);
+    free(date);
+    return 0;
 }

@@ -9,6 +9,6 @@ char **file_amountparse(char *buffer, FILE *csv, char **amount, int file_linesiz
 int file_columncount(FILE *csv);
 int file_rowcount(FILE *csv);
 int regextable_input(char **date, char **amount);
-int regex_checkinput(char userinput[10]);
+int regex_checkinput(char *userinput);
 char *regex_validate(char *test);
 #endif

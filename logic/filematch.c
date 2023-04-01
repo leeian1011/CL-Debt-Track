@@ -146,7 +146,7 @@ int regextable_input(char **date, char **amount){
     return matched;
  }   
 
-int regex_inputcheck(char userinput[10]){
+int regex_checkinput(char *userinput){
     regex_t regex;
     
     int value;
