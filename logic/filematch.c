@@ -146,6 +146,18 @@ int regextable_input(char **date, char **amount){
     return matched;
  }   
 
+int regex_inputcheck(char userinput[10]){
+    regex_t regex;
+    
+    int value;
+    char *pattern = "(Jan|Feb|Mar|Apr|May|Jun|Jul|Aug|Oct|Sep|Nov|Dec)";
+
+    value = regcomp(&regex, pattern, REG_EXTENDED);
+
+    value = regexec(&regex, userinput, 0, NULL, REG_EXTENDED);
+    
+    return value;
+}
 
 int file_rowcount(FILE *csv){
     int count = 0;

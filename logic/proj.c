@@ -20,7 +20,7 @@ int main(){
         query[strlen(query) - 1]  = '\0';
 
         if (strcasecmp(query, operations[0]) == 0 || query[0] == '1'){
-            //addfunct();
+            addfunct();
             return 0;
         }
         else if (strcasecmp(query, operations[1]) == 0 || query[0] == '2'){
@@ -42,4 +42,15 @@ int main(){
             printf("%s is not an operation!", query);
         }
     } while (query[0] == '\0');
+}
+
+int addfunct(){
+    char date[10];
+    float amount;
+
+    do{
+        printf("Input Date:");
+        fgets(date, 10, stdin);
+        date[strlen(date) - 1] = '\0';  
+    }while(date[0] == '\0' || regex_checkinput(date) != 0);
 }
