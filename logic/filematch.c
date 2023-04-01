@@ -30,21 +30,32 @@ void file_read(FILE* csv){
     if (date == NULL){
         return;
     }
-    
+
+    char **amount = malloc(sizeof(char*) * rows);
+    if (amount == NULL){
+        return;
+    }
+
     for (int i = 0; i < rows; i++){
         date[i] = malloc(sizeof(char*) * columns);
+        amount[i] = malloc(sizeof(char*) * columns);
     }
 
     
-    regextable_input(file_dateparse(buffer, csv, date, file_linesize));
+
+    
+    file_dateparse(buffer, csv, date, amount, file_linesize);
+    regextable_input(date, amount);
 
 }
 
 
 
-char **file_dateparse(char *buffer, FILE *csv, char **date, int file_linesize){
+char **file_dateparse(char *buffer, FILE *csv, char **date, char **amount, int file_linesize){
     while(fgets(buffer, file_linesize, csv) != NULL){
-        char *test = strtok(buffer, ",");
+        char *token_date = strtok(buffer, ",");
+        char *token_amount = strtok(NULL, ",");
+        printf("amount: %s\n", token_amount);
         // strtok returns a POINTER to a char * (i.e the address of buffer)
         // whenever buffer gets updated to the next line by fgets, strtok's POINTER return value points to the most up to date buffer token
         // i.e
@@ -53,16 +64,16 @@ char **file_dateparse(char *buffer, FILE *csv, char **date, int file_linesize){
         // if buffer gets set to = "hello, hi"
         // strtoken("buffer", ",") returns a ->addres of hello.
         // strtoken(NULL, ",") to extract the next token after the delimiter.
-        date[date_array] = strdup(test);
-        printf("%s\n", date[date_array]);
+        date[date_array] = strdup(token_date);
+        amount[date_array] = strdup(token_amount);
+        printf("date %s\n", date[date_array]);
         date_array++;
     }
     return date;
 }
 
 
-
-int regextable_input(char **date){
+int regextable_input(char **date, char **amount){
     regex_t regex;
     regmatch_t regex_match[3];
     // regmatch is used to extract out SUBEXPRESSIONS grouped i.e (...) in pattern
@@ -82,6 +93,7 @@ int regextable_input(char **date){
             printf("matches\n");
         }
 
+        float amountf = atof(amount[i]);
         // initialize matches and match_length only after regexec has been executed, if not there are no matches to reference!
         int match_monthstart = regex_match[2].rm_so;
         int match_monthend = regex_match[2].rm_eo;
@@ -102,7 +114,7 @@ int regextable_input(char **date){
         strncpy(match_date, date[i] + match_datestart, match_datelength);
         match_date[match_datelength] = '\0';
         
-        table_validate(match_date, match_month);
+        table_validate(match_date, match_month, amountf);
     }
     return regex_checker;
 }

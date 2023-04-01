@@ -11,6 +11,6 @@ int main(){
     FILE *csv = fopen(CSVFILE, "r");
     file_read(csv);
     fclose(csv);
-    printf("hi");
+    table_matchseek("5Jan");
     table_sum();
 }

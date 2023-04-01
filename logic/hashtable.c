@@ -20,10 +20,10 @@ void table_initialize(){
 
 
 
-void table_validate(char *date, char *month){
+void table_validate(char *date, char *month, float amount){
     for (int i = 0; i < MAX; i++){
         if(strcmp(month, MONTHS[i]) == 0){
-            table_linklist(date, month, i);
+            table_linklist(date, month, amount, i);
             printf("LINK LIST NUMBER :%d\n", i);
             break;
         }
@@ -32,12 +32,12 @@ void table_validate(char *date, char *month){
 
 
 
-void table_linklist(char *date, char *month, int month_index){
+void table_linklist(char *date, char *month, float amount, int month_index){
     char datemonth[10] = "";
     strcat(datemonth, date);
     strcat(datemonth, month);
     node *newnode = malloc(sizeof(node));
-    newnode->amount_paid = 100.50;
+    newnode->amount_paid = amount;
     strcpy(newnode->date, datemonth);
     newnode->next_node = TABLE[month_index];
     TABLE[month_index] = newnode;
