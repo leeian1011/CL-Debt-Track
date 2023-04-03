@@ -150,7 +150,7 @@ int regex_checkinput(char *userinput){
     regex_t regex;
     
     int value;
-    char *pattern = "(Jan|Feb|Mar|Apr|May|Jun|Jul|Aug|Oct|Sep|Nov|Dec)";
+    char *pattern = "([[:digit:]])-(Jan|Feb|Mar|Apr|May|Jun|Jul|Aug|Oct|Sep|Nov|Dec)";
 
     value = regcomp(&regex, pattern, REG_EXTENDED);
 

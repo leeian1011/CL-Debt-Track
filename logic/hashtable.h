@@ -1,5 +1,6 @@
 #ifndef HASHTABLE_H
 #define HASHTABLE_H
+#include <stdbool.h>
 
 #define MAX 12
 
@@ -16,5 +17,6 @@ void table_validate(char *date, char *month, float amount);
 void table_linklist(char *date, char*month, float amount, int month_index);
 void table_matchseek(char *test);
 char *table_traversal(char *test, int month_index);
+bool table_insertinput(char *userinput, char* amount);
 float table_sum();
 #endif

@@ -21,7 +21,7 @@ int main(){
         query[strlen(query) - 1]  = '\0';
 
         if (strcasecmp(query, operations[0]) == 0 || query[0] == '1'){
-            //addfunct();
+            addfunct();
             return 0;
         }
         else if (strcasecmp(query, operations[1]) == 0 || query[0] == '2'){
@@ -47,12 +47,17 @@ int main(){
 
 int addfunct(){
     char *date = malloc(sizeof(char*));
-
+    char *amount = malloc(sizeof(char*));
     do{
         printf("Input Date:");
         fgets(date, sizeof(char*), stdin);
         date[strlen(date) - 1] = '\0';  
     }while(date[0] == '\0' || regex_checkinput(date) != 0);
-    free(date);
+    do{
+        printf("Input amount repaid:");
+        fgets(amount, sizeof(char*), stdin);
+        amount[strlen(amount) - 1] = '\0';
+    }while(date[0] == '\0');
+    table_insertinput(date, amount);
     return 0;
 }

@@ -1,7 +1,7 @@
 #ifndef FILEMATCH_H
 #define FILEMATCH_H
 
-#define CSVFILE "file/test.csv"
+#define CSVFILE "file/data.csv"
 
 void file_read(FILE *csv);
 char **file_dateparse(char *buffer, FILE *csv, char **date, char **amount, int file_linesize);

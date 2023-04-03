@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <stdbool.h>
 
 #include "filematch.h"
 #include "hashtable.h"
@@ -98,4 +99,15 @@ float table_sum(){
     }
     printf("%.2f", sum);
     return sum;
+}
+
+bool table_insertinput(char *userinput, char *amount){
+    FILE *csv = fopen(CSVFILE, "a");
+    if (csv == NULL){
+        return false;
+    }
+    
+    fprintf(csv, "%s,%s\n", userinput, amount);
+    fclose(csv);
+    return true;
 }
