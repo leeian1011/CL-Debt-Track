@@ -25,7 +25,6 @@ void table_validate(char *date, char *month, float amount){
     for (int i = 0; i < MAX; i++){
         if(strcmp(month, MONTHS[i]) == 0){
             table_linklist(date, month, amount, i);
-            printf("LINK LIST NUMBER :%d\n", i);
             break;
         }
     }
@@ -42,7 +41,7 @@ void table_linklist(char *date, char *month, float amount, int month_index){
     strcpy(newnode->date, datemonth);
     newnode->next_node = TABLE[month_index];
     TABLE[month_index] = newnode;
-    printf("linked\n");
+    printf("%s\n%f\n", newnode->date, newnode->amount_paid);
 }
 
 void table_matchseek(char *test){
@@ -50,7 +49,6 @@ void table_matchseek(char *test){
 
     for (int i = 0; i < MAX; i++){
         if (strcmp(matched_month, MONTHS[i]) == 0){
-            printf("it is matched to month %d\n", i);
             table_traversal(test, i);
             break;
         }
@@ -59,25 +57,24 @@ void table_matchseek(char *test){
 
 char *table_traversal(char *test, int month_index){
     int trigger = 0;
-    printf("m_indx =%d\n", month_index);
     
     node *table_seeker = TABLE[month_index];
     while(trigger == 0){
         if (table_seeker == NULL){
-            printf("failure");
-            return "rip";
+            return "failed";
         }
         if (strcmp(table_seeker->date, test) != 0){
-            printf("comparing: %s\n",table_seeker->date);
-            printf("%s\n", test);
             table_seeker = table_seeker->next_node;
             if (table_seeker == NULL){
+                printf("End of entries");
                 return "table_seeker does not exist";
             }
             continue;
+        }else if (strcmp(table_seeker->date, test) == 0){
+            printf("Repaid on %s: %.2f\n", table_seeker->date, table_seeker->amount_paid);
+            table_seeker = table_seeker->next_node;
+            continue;
         }else{
-            printf("Date Found: %s", table_seeker->date);
-            printf("Repaid on %s: %.2f", table_seeker->date, table_seeker->amount_paid);
             trigger = 1;
         }
     }
@@ -101,13 +98,7 @@ float table_sum(){
     return sum;
 }
 
-bool table_insertinput(char *userinput, char *amount){
-    FILE *csv = fopen(CSVFILE, "a");
-    if (csv == NULL){
-        return false;
-    }
-    
-    fprintf(csv, "%s,%s\n", userinput, amount);
-    fclose(csv);
-    return true;
-}
+
+
+
+

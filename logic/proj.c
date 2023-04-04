@@ -1,11 +1,16 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <ctype.h>
+#include <stdbool.h>
 
 #include "hashtable.h"
 #include "filematch.h"
 //function headers
 int addfunct();
+int findfunct();
+bool amount_check(char *amount);
+bool remove_funct();
 
 int main(){
     FILE *csv = fopen(CSVFILE, "r");
@@ -33,8 +38,7 @@ int main(){
             return 2;
         }
         else if (strcasecmp(query, operations[3]) == 0 || query[0] == '4'){
-            //findfunct();
-            return 3;
+            findfunct();
         }
         else if(strcasecmp(query, operations[4]) == 0 || query[0] == '5'){
             return 0;
@@ -57,7 +61,42 @@ int addfunct(){
         printf("Input amount repaid:");
         fgets(amount, sizeof(char*), stdin);
         amount[strlen(amount) - 1] = '\0';
-    }while(date[0] == '\0');
-    table_insertinput(date, amount);
+    }while(date[0] == '\0' || !amount_check(amount));
+    if(file_insertinput(date, amount)){
+        printf("Succesfully Added!");
+    }
     return 0;
+}
+
+int findfunct(){
+    char *input = malloc(sizeof(char*));
+    do{
+    printf("Input date:");
+    fgets(input, sizeof(char*), stdin);
+    input[strlen(input) - 1] = '\0';
+    table_matchseek(input);
+    }while(input[0] == '\0' || regex_checkinput(input) != 0);
+    return 0;
+}
+
+bool removefunct(){
+    char *input = malloc(sizeof(char*));
+    
+    do{
+        printf("Input date to remove:");
+        fgets(input, sizeof(char*), stdin);
+
+    }while(input[0] != '\0' || regex_checkinput(input) != 0);
+    return true;
+}
+
+bool amount_check(char *amount){
+    int count = strlen(amount);
+
+    for (int i = 0; i < count; i++){
+        if(!isdigit(*amount)){
+            return false;
+        }
+    }
+    return true;
 }

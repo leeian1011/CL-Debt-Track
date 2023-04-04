@@ -46,7 +46,8 @@ void file_read(FILE* csv){
     
     file_dateparse(buffer, csv, date, amount, file_linesize);
     regextable_input(date, amount);
-
+    free(buffer);
+    free(date);
 }
 
 
@@ -55,7 +56,6 @@ char **file_dateparse(char *buffer, FILE *csv, char **date, char **amount, int f
     while(fgets(buffer, file_linesize, csv) != NULL){
         char *token_date = strtok(buffer, ",");
         char *token_amount = strtok(NULL, ",");
-        printf("amount: %s\n", token_amount);
         // strtok returns a POINTER to a char * (i.e the address of buffer)
         // whenever buffer gets updated to the next line by fgets, strtok's POINTER return value points to the most up to date buffer token
         // i.e
@@ -66,7 +66,6 @@ char **file_dateparse(char *buffer, FILE *csv, char **date, char **amount, int f
         // strtoken(NULL, ",") to extract the next token after the delimiter.
         date[date_array] = strdup(token_date);
         amount[date_array] = strdup(token_amount);
-        printf("date %s\n", date[date_array]);
         date_array++;
     }
     return date;
@@ -77,8 +76,8 @@ int regextable_input(char **date, char **amount){
     regex_t regex;
     regmatch_t regex_match[3];
     // regmatch is used to extract out SUBEXPRESSIONS grouped i.e (...) in pattern
-    printf("DATE ARRAY: %d\n", date_array);
-    char *regex_pattern = "([[:digit:]]+)-(Jan|Feb|Mar|Apr|May|Jun|Jul|Aug|Oct|Sep|Nov|Dec)";
+
+    char *regex_pattern = "([[:digit:]]+-)(Jan|Feb|Mar|Apr|May|Jun|Jul|Aug|Oct|Sep|Nov|Dec)";
     // surround [[:digit:]] in SUBEXPRESSIONS in order to be able to extract date and Mth
     // regex_match is an object which gives you access to .rm_so and .rm_eo
     // so and eo are basically the byte offset of the start of the string matched and the end of the string matched respectively.
@@ -89,8 +88,9 @@ int regextable_input(char **date, char **amount){
 
     for (int i = 0; i < date_array; i++){
         regex_checker = regexec(&regex, date[i], 3, regex_match, REG_EXTENDED);
-        if (regex_checker == 0){
-            printf("matches\n");
+        if (regex_checker != 0){
+            printf("File read error, Error code = 1");
+            return 1;
         }
 
         float amountf = atof(amount[i]);
@@ -127,9 +127,7 @@ int regextable_input(char **date, char **amount){
     int regex_engine = regcomp(&regex, regex_pattern, REG_EXTENDED);
 
     regex_engine = regexec(&regex, test, 3, match, REG_EXTENDED);
-    if (regex_engine == 0){
-        printf("regex_engine: match found\n");
-    }else{
+    if (regex_engine != 0){
         printf("regex_engine: no match");
         return "fail";
     }
@@ -141,7 +139,6 @@ int regextable_input(char **date, char **amount){
     char *matched = malloc(match_length);
     strncpy(matched, test + matchstart, match_length);
     matched[match_length] = '\0';
-    printf("matched string: %s\n", matched);
 
     return matched;
  }   
@@ -157,6 +154,17 @@ int regex_checkinput(char *userinput){
     value = regexec(&regex, userinput, 0, NULL, REG_EXTENDED);
     
     return value;
+}
+
+bool file_insertinput(char *userinput, char *amount){
+    FILE *csv = fopen(CSVFILE, "a");
+    if (csv == NULL){
+        return false;
+    }
+    
+    fprintf(csv, "%s,%s\n", userinput, amount);
+    fclose(csv);
+    return true;
 }
 
 int file_rowcount(FILE *csv){
