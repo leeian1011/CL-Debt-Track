@@ -81,7 +81,6 @@ int regextable_input(char **date, char **amount){
     for (int i = 0; i < date_array; i++){
         regex_checker = regexec(&regex, date[i], 3, regex_match, REG_EXTENDED);
         if (regex_checker != 0){
-            printf("File read error, Error code = 1");
             return 1;
         }
 
@@ -144,7 +143,6 @@ int regex_checkinput(char *userinput){
     value = regcomp(&regex, pattern, REG_EXTENDED);
 
     value = regexec(&regex, userinput, 0, NULL, REG_EXTENDED);
-    printf("%s\n%d\n", userinput, value);
     return value;
 }
 
@@ -184,6 +182,10 @@ bool file_removedate(char *userinput){
     }
     printf("%s\n", userinput);
     rewind(csv); //we want to read everything from the file including the headers
+    FILE *new = fopen(CSVFILE, "w");
+    if (new == NULL){
+        return false;
+    }
 
     while (fgets(buffer, linesize, csv) != NULL){
         char *date = strtok(buffer, ",");
@@ -192,9 +194,10 @@ bool file_removedate(char *userinput){
         if(strcmp(date, userinput) == 0){
             continue;
         }
-        printf("%s\n%s\n", date, amount);
+        fprintf(new, "%s,%s", date, amount);
     }
 
+    fclose(new);
     fclose(csv);
     return true;
 }
@@ -225,11 +228,6 @@ int file_linesize(FILE *csv){
             break;
         }
     }
+    linesize ++;
     return linesize;
-}
-
-void file_skipline(FILE *csv, int linesize){
-    char *dump = malloc(linesize);
-
-    fgets(dump, linesize, csv);
 }

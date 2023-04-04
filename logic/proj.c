@@ -15,7 +15,11 @@ bool removefunct();
 
 int main(){
     FILE *csv = fopen(CSVFILE, "r");
-    char *operations[] = {"Add", "Remove", "Remainder", "Find", "Exit"};
+    char *operations[] = {"Add",
+                          "Remove",
+                          "Remainder",
+                          "Find",
+                          "Exit"};
     char *query = malloc(10);
 
     table_initialize();
@@ -45,9 +49,11 @@ int main(){
             return 0;
         }
         else{
-            printf("%s is not an operation!", query);
+            printf("%s is not an operation!\n", query);
+            main();
         }
     } while (query[0] == '\0');
+    free(query);
 }
 
 int addfunct(){
@@ -75,6 +81,9 @@ int findfunct(){
         printf("Input date:");
         fgets(input, sizeof(char*), stdin);
         input[strlen(input) - 1] = '\0';
+        if(input[0] == 'n'){
+            main();
+        }
     }while(input[0] == '\0' || regex_checkinput(input) != 0);
 
     table_matchseek(input);
@@ -103,11 +112,4 @@ bool amount_check(char *amount){
         }
     }
     return true;
-}
-
-void clearbuffer(){
-    char c;
-    while((c = fgetc(stdin)) != '\n' && (c = fgetc(stdin)) != EOF){
-        //clears any keyboard buffer stream
-    }
 }

@@ -1,7 +1,43 @@
-date, amount_repaid
-1-Jan, 100
-2-Jan, 100
-5-Jan, 300
-7-Jan, 1700
-10-Feb, 100
-9-Mar, 20
+﻿Date,Repaid
+23-Aug,300
+29-Aug,300 
+11-Sep,300 
+18-Sep,300 
+25-Sep,300 
+3-Oct,150 
+10-Oct,2500
+10-Oct,150 
+17-Oct,150 
+24-Oct,75 
+31-Oct,150
+6-Nov,150 
+14-Nov,150 
+14-Nov,25
+21-Nov,50 
+27-Nov,50 
+4-Dec,50 
+7-Dec,1000
+12-Dec,50 
+19-Dec,50 
+21-Dec,25
+22-Dec,50
+26-Dec,100
+31-Dec,25
+1-Jan,800
+14-Jan,25
+22-Jan,100
+22-Jan,175
+30-Jan,50
+1-Feb,800
+4-Feb,700
+5-Feb,50
+13-Feb,50
+20-Feb,25
+27-Feb,50
+1-Mar,800
+5-Mar,50
+7-Mar,700
+13-Mar,50
+20-Mar,50
+26-Mar,75
+1-Apr,800
