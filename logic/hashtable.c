@@ -66,7 +66,7 @@ char *table_traversal(char *test, int month_index){
         if (strcmp(table_seeker->date, test) != 0){
             table_seeker = table_seeker->next_node;
             if (table_seeker == NULL){
-                printf("End of entries");
+                printf("End of entries\n");
                 return "table_seeker does not exist";
             }
             continue;
