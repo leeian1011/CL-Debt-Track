@@ -10,19 +10,11 @@ int date_array = 0;
 // initialized date_array to keep track of number of strings in **date
 
 void file_read(FILE* csv){
-    char c;
-    int file_linesize = 0;
     int rows = file_rowcount(csv);
     int columns = file_columncount(csv);
+    int linesize = file_linesize(csv);
 
-    // This grabs the size in bytes of the first line of the csv file AND sets the reader pointer to the second line.
-    while ((c = fgetc(csv)) != EOF){
-        file_linesize++;
-        if(c == '\n'){
-            break;
-        }
-    }
-    char *buffer = malloc(file_linesize);
+    char *buffer = malloc(linesize);
     if (buffer == NULL){
         return;
     }
@@ -44,7 +36,7 @@ void file_read(FILE* csv){
     
 
     
-    file_dateparse(buffer, csv, date, amount, file_linesize);
+    file_dateparse(buffer, csv, date, amount, linesize);
     regextable_input(date, amount);
     free(buffer);
     free(date);
@@ -152,7 +144,7 @@ int regex_checkinput(char *userinput){
     value = regcomp(&regex, pattern, REG_EXTENDED);
 
     value = regexec(&regex, userinput, 0, NULL, REG_EXTENDED);
-    
+    printf("%s\n%d\n", userinput, value);
     return value;
 }
 
@@ -179,6 +171,33 @@ int file_rowcount(FILE *csv){
     return count;
 }
 
+bool file_removedate(char *userinput){
+    FILE *csv = fopen(CSVFILE, "r");
+    if (csv == NULL){
+        return false;
+    }
+    int linesize = file_linesize(csv);
+
+    char *buffer = malloc(linesize);
+    if (buffer == NULL){
+        return false;
+    }
+    printf("%s\n", userinput);
+    rewind(csv); //we want to read everything from the file including the headers
+
+    while (fgets(buffer, linesize, csv) != NULL){
+        char *date = strtok(buffer, ",");
+        char *amount = strtok(NULL, ",");
+
+        if(strcmp(date, userinput) == 0){
+            continue;
+        }
+        printf("%s\n%s\n", date, amount);
+    }
+
+    fclose(csv);
+    return true;
+}
 
 
 int file_columncount(FILE *csv){
@@ -194,4 +213,23 @@ int file_columncount(FILE *csv){
         }
     }
     return count;
+}
+
+int file_linesize(FILE *csv){
+    // This grabs the size in bytes of the first line of the csv file AND sets the reader pointer to the second line.
+    char c;
+    int linesize = 0;
+     while ((c = fgetc(csv)) != EOF){
+        linesize++;
+        if(c == '\n'){
+            break;
+        }
+    }
+    return linesize;
+}
+
+void file_skipline(FILE *csv, int linesize){
+    char *dump = malloc(linesize);
+
+    fgets(dump, linesize, csv);
 }

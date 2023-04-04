@@ -96,8 +96,3 @@ float table_sum(){
     printf("%.2f", sum);
     return sum;
 }
-
-
-
-
-
