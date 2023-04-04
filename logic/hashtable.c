@@ -41,7 +41,6 @@ void table_linklist(char *date, char *month, float amount, int month_index){
     strcpy(newnode->date, datemonth);
     newnode->next_node = TABLE[month_index];
     TABLE[month_index] = newnode;
-    printf("%s\n%f\n", newnode->date, newnode->amount_paid);
 }
 
 void table_matchseek(char *test){
@@ -61,8 +60,10 @@ char *table_traversal(char *test, int month_index){
     node *table_seeker = TABLE[month_index];
     while(trigger == 0){
         if (table_seeker == NULL){
+            printf("End of entries\n");
             return "failed";
         }
+
         if (strcmp(table_seeker->date, test) != 0){
             table_seeker = table_seeker->next_node;
             if (table_seeker == NULL){
@@ -74,8 +75,6 @@ char *table_traversal(char *test, int month_index){
             printf("Repaid on %s: %.2f\n", table_seeker->date, table_seeker->amount_paid);
             table_seeker = table_seeker->next_node;
             continue;
-        }else{
-            trigger = 1;
         }
     }
     return table_seeker->date;
