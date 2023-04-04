@@ -1,4 +1,3 @@
-# learning_git
+CRUD Command-line Debt Tracker (CCDT)
 
-Learning how to use both git and github!
 
