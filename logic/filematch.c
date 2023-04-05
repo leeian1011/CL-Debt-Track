@@ -202,6 +202,15 @@ bool file_removedate(char *userinput){
     return true;
 }
 
+char *debtfile_grab(){
+    FILE *debt = fopen(DEBTFILE, "r");
+    char *buffer = malloc(sizeof(char*));
+    if (buffer == NULL){
+        return "couldnt allocated";
+    }
+    fgets(buffer, sizeof(char*), debt);
+    return buffer;
+}
 
 int file_columncount(FILE *csv){
     int count = 0;

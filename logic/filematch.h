@@ -3,8 +3,10 @@
 #include <stdbool.h>
 
 #define CSVFILE "file/data.csv"
+#define DEBTFILE "file/debt.csv"
 
 //file related functions
+char *debtfile_grab();
 void file_read(FILE *csv);
 void file_skipline(FILE *csv, int linesize);
 char **file_dateparse(char *buffer, FILE *csv, char **date, char **amount, int file_linesize);

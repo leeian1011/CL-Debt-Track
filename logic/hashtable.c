@@ -72,7 +72,7 @@ char *table_traversal(char *test, int month_index){
             }
             continue;
         }else if (strcmp(table_seeker->date, test) == 0){
-            printf("Repaid on %s: %.2f\n", table_seeker->date, table_seeker->amount_paid);
+            printf("Repaid on %s: $%.2f\n", table_seeker->date, table_seeker->amount_paid);
             table_seeker = table_seeker->next_node;
             continue;
         }
@@ -82,9 +82,12 @@ char *table_traversal(char *test, int month_index){
 
 float table_sum(){
     float sum = 0.0;
-    for(int i = 0; i < 3; i++){
+    for(int i = 0; i < MAX; i++){
         int trigger = 0;
         node *table_seeker = TABLE[i];
+        if(table_seeker == NULL){
+            continue;
+        }
             while (trigger == 0){
             sum += table_seeker->amount_paid;
             if (table_seeker->next_node == NULL){
@@ -93,6 +96,5 @@ float table_sum(){
             table_seeker = table_seeker->next_node;
         }
     }
-    printf("%.2f", sum);
     return sum;
 }
