@@ -6,12 +6,15 @@
 
 #include "hashtable.h"
 #include "filematch.h"
+
+
 //function headers
-void clearbuffer();
+void selector(int operator);
 int addfunct();
 int findfunct();
 bool amount_check(char *amount);
 bool removefunct();
+
 
 int main(){
     FILE *csv = fopen(CSVFILE, "r");
@@ -20,10 +23,10 @@ int main(){
     }
     char *operations[] = {"Add",
                           "Remove",
-                          "Remainder",
                           "Find",
                           "Update",
                           "Exit"};
+    const int operation_count = 5;
 
     char *query = malloc(10);
     
@@ -32,47 +35,53 @@ int main(){
     file_read(csv);
     fclose(csv);
     do{
-        printf("You're currently paying off $%.2f\n", debt);
-        printf("Select an Operation:\n1:Add entry\n2:Remove entry\n3:Remainder\n4:Find entries\n5:Update debt\n6:Exit\n");
+        printf("DEBT: $%.2f\n", debt);
+        printf("REPAID: $%.2f\n", table_sum());
+        if (debt <= table_sum()){
+            printf("You've cleared off your debts!");
+        }else{
+        printf("REMAINDER: %.2f\n", debt - table_sum());
+        }
+        printf("Select an Operation:\n1:Add entry\n2:Remove entry\n3:Find entries\n4:Update debt\n5:Exit\n");
         fgets(query, 10, stdin);
         query[strlen(query) - 1]  = '\0';
-
-        if (strcasecmp(query, operations[0]) == 0 || query[0] == '1'){
-            addfunct();
-            main();
-            return 0;
+        int checkformatch = 0;
+        for(int i = 1; i < operation_count; i++){
+            char placeholder = i + '0';
+            if(strcasecmp(query, operations[i - 1]) == 0 || query[0] == placeholder){
+                selector(i);
+                break;
+            } 
+            checkformatch++;
         }
-        else if (strcasecmp(query, operations[1]) == 0 || query[0] == '2'){
-            removefunct();
-            main();
-            return 0;
-        }
-        else if (strcasecmp(query, operations[2]) == 0 || query[0] == '3'){
-            float total_repaid = table_sum();
-            float remainder = debt - total_repaid;
-            printf("Remainder: %.2f\n", remainder);
-            main();
-            return 0;
-        }
-        else if (strcasecmp(query, operations[3]) == 0 || query[0] == '4'){
-            findfunct();
-            main();
-            return 0;
-        }
-        else if(strcasecmp(query, operations[4]) == 0 || query[0] == '5'){
-            printf("%.2f", table_sum());
-            return 0;
-        }
-        else if(strcasecmp(query, operations[5]) == 0 || query[0] == '6'){
-            return 0;
-        }
-        else{
-            printf("%s is not an operation!\n", query);
+        if (checkformatch == operation_count){
+            printf("%s is not a valid operation!\n", query);
             main();
         }
-    } while (query[0] == '\0');
+        } while (query[0] == '\0');
     free(query);
 }
+
+
+void selector(int operator){
+    switch (operator){
+        case 1:
+            addfunct();
+            break;
+        case 2: 
+            removefunct();
+            break;
+        case 3: 
+            findfunct();
+            break;
+        case 4:
+            break;
+            
+        default:
+            break;
+    }
+}
+
 
 int addfunct(){
     char *date = malloc(sizeof(char*));
@@ -93,6 +102,7 @@ int addfunct(){
     return 0;
 }
 
+
 int findfunct(){
     char *input = malloc(sizeof(char*));
     do{
@@ -104,6 +114,7 @@ int findfunct(){
     table_matchseek(input);
     return 0;
 }
+
 
 bool removefunct(){
     char *input = malloc(sizeof(char*));
@@ -117,6 +128,7 @@ bool removefunct(){
     free(input);
     return true;
 }
+
 
 bool amount_check(char *amount){
     int count = strlen(amount);

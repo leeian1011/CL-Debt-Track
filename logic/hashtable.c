@@ -20,7 +20,6 @@ void table_initialize(){
 }
 
 
-
 void table_validate(char *date, char *month, float amount){
     for (int i = 0; i < MAX; i++){
         if(strcmp(month, MONTHS[i]) == 0){
@@ -29,7 +28,6 @@ void table_validate(char *date, char *month, float amount){
         }
     }
 }
-
 
 
 void table_linklist(char *date, char *month, float amount, int month_index){
@@ -43,18 +41,20 @@ void table_linklist(char *date, char *month, float amount, int month_index){
     TABLE[month_index] = newnode;
 }
 
-void table_matchseek(char *test){
-    char *matched_month = regex_validate(test);
+
+void table_matchseek(char * userinput){
+    char *matched_month = regex_validate(userinput);
 
     for (int i = 0; i < MAX; i++){
         if (strcmp(matched_month, MONTHS[i]) == 0){
-            table_traversal(test, i);
+            table_traversal(userinput, i);
             break;
         }
     }
 }
 
-char *table_traversal(char *test, int month_index){
+
+char *table_traversal(char *userinput, int month_index){
     int trigger = 0;
     
     node *table_seeker = TABLE[month_index];
@@ -64,14 +64,14 @@ char *table_traversal(char *test, int month_index){
             return "failed";
         }
 
-        if (strcmp(table_seeker->date, test) != 0){
+        if (strcmp(table_seeker->date, userinput) != 0){
             table_seeker = table_seeker->next_node;
             if (table_seeker == NULL){
                 printf("End of entries\n");
                 return "table_seeker does not exist";
             }
             continue;
-        }else if (strcmp(table_seeker->date, test) == 0){
+        }else if (strcmp(table_seeker->date, userinput) == 0){
             printf("Repaid on %s: $%.2f\n", table_seeker->date, table_seeker->amount_paid);
             table_seeker = table_seeker->next_node;
             continue;
@@ -79,6 +79,7 @@ char *table_traversal(char *test, int month_index){
     }
     return table_seeker->date;
 }
+
 
 float table_sum(){
     float sum = 0.0;

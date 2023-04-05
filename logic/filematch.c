@@ -110,14 +110,14 @@ int regextable_input(char **date, char **amount){
     return regex_checker;
 }
 
- char *regex_validate(char *test){
+ char *regex_validate(char *userinput){
     regex_t regex;
     regmatch_t match[3];
 
     char *regex_pattern = "([[:digit:]])*(Jan|Feb|Mar|Apr|May|Jun|Jul|Aug|Oct|Sep|Nov|Dec)";
     int regex_engine = regcomp(&regex, regex_pattern, REG_EXTENDED);
 
-    regex_engine = regexec(&regex, test, 3, match, REG_EXTENDED);
+    regex_engine = regexec(&regex, userinput, 3, match, REG_EXTENDED);
     if (regex_engine != 0){
         printf("regex_engine: no match");
         return "fail";
@@ -128,7 +128,7 @@ int regextable_input(char **date, char **amount){
     int matchend = match[2].rm_eo;
     size_t match_length = matchend - matchstart;
     char *matched = malloc(match_length);
-    strncpy(matched, test + matchstart, match_length);
+    strncpy(matched, userinput + matchstart, match_length);
     matched[match_length] = '\0';
 
     return matched;
