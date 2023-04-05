@@ -8,7 +8,6 @@
 //file related functions
 char *debtfile_grab();
 void file_read(FILE *csv);
-void file_skipline(FILE *csv, int linesize);
 char **file_dateparse(char *buffer, FILE *csv, char **date, char **amount, int file_linesize);
 char **file_amountparse(char *buffer, FILE *csv, char **amount, int file_linesize);
 int file_columncount(FILE *csv);
